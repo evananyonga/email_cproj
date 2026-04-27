@@ -9,10 +9,12 @@ int main() {
     email.subject = "Hello";
     email.body = "Hi Bob, How are you?";
 
-    printf("From: %s\n", email.from);
-    printf("To: %s\n", email.to);
-    printf("Subject: %s\n", email.subject);
-    printf("Body: %s\n", email.body);
+    if (validate_email(&email)) {
+        printf("Email is valid.  Printing...\n");
+        print_email(&email);
+    } else {
+        printf("Email is invalid.  Aborting.\n");
+    }
 
     return 0;
 }
