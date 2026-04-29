@@ -1,4 +1,4 @@
-#ifdef TRANSPORT_H
+#ifndef TRANSPORT_H
 #define TRANSPORT_H
 
 #include "email.h"
