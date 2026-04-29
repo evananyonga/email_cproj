@@ -6,9 +6,11 @@ CFLAGS = -Wall -Wextra -g
 TARGET = email
 OBJS = main.o email.o
 
+.PHONY: clean
+
 # Default rule - build the final binary
 $(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) -o $(TARGET)
+	$(CC) $(CFLAGS) $(OBJS) -o $(TARGET)
 
 # Rule to compile each .c file to a .o object file
 main.o: main.c email.h
