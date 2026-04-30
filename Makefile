@@ -4,7 +4,7 @@ CFLAGS = -Wall -Wextra -g
 
 # Files
 TARGET = email
-OBJS = main.o email.o
+OBJS = main.o email.o transport.o
 
 .PHONY: clean
 
@@ -18,6 +18,9 @@ main.o: main.c email.h
 
 email.o: email.c email.h
 	$(CC) $(CFLAGS) -c email.c
+
+transport.o: transport.c transport.h
+	$(CC) $(CFLAGS) -c transport.c
 
 # Clean rule to remove all built files
 clean:
