@@ -5,7 +5,7 @@
 
 typedef struct {
     const char* name;
-    int (*send)(Email *email);
+    int (*send)(const Email *email);
     int (*validate)(void);
 } Transport;
 
