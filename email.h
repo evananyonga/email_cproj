@@ -9,6 +9,5 @@ typedef struct {
 } Email;
 
 int validate_email(Email *email);
-void print_email(Email *email);
 
 #endif // EMAIL_H

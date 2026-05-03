@@ -21,10 +21,3 @@ int validate_email(Email *email) {
     }
     return 1; // Valid email
 }
-
-void print_email(Email *email) {
-    printf("From: %s\n", email->from);
-    printf("To: %s\n", email->to);
-    printf("Subject: %s\n", email->subject);
-    printf("Body: %s\n", email->body);
-}
