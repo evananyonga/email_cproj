@@ -4,6 +4,5 @@
 #include <netdb.h>
 #include <openssl/ssl.h>
 #include <openssl/err.h>
-#include "sendmail.h"
-#include "transport.h"
+#include "smtp.h"
 
