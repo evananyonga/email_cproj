@@ -95,14 +95,22 @@ static int smtp_send(const Email *email) {
     }
 
     /* Phase 3: SMTP Authentication and Sending (Dialogue) */
+    const char *smtp_user = getenv("SMTP_USER");
+    const char *smtp_pass = getenv("SMTP_PASS");
+
+    if (smtp_user == NULL || smtp_pass == NULL) {
+        printf("Error: SMTP_USER or SMTP_PASS not set\n");
+        return 0;
+    }
+
     smtp_send_command(ssl, "EHLO localhost\r\n", 250);
     smtp_send_command(ssl, "AUTH LOGIN\r\n", 334);
 
     // Base64 encode username and password here and send them
-    snprintf(cmd, sizeof(cmd), "%s\r\n", "your_base64_username");
+    snprintf(cmd, sizeof(cmd), "%s\r\n", smtp_user);
     smtp_send_command(ssl, cmd, 334);
 
-    snprintf(cmd, sizeof(cmd), "%s\r\n", "your_base64_password");
+    snprintf(cmd, sizeof(cmd), "%s\r\n", smtp_pass);
     smtp_send_command(ssl, cmd, 334);
 
     snprintf(cmd, sizeof(cmd), "MAIL FROM:<%s>\r\n", email->from);

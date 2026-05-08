@@ -5,8 +5,8 @@
 int main() {
     Email email;
 
-    email.from = "iamafasha@gmail.com";
-    email.to = "evewish@gmail.com";
+    email.from = getenv("SMTP_FROM");
+    email.to = getenv("SMTP_TO");
     email.subject = "Hello from your the other side";
     email.body = "Be Afraid, be very afraid.  I am coming for you.";
 
