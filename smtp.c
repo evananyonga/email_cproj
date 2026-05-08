@@ -133,3 +133,9 @@ static int smtp_send(const Email *email) {
     
     return 1;
 }
+
+Transport smtp_transport = {
+    .name = "smtp",
+    .send = smtp_send,
+    .validate = NULL // Add validation logic if needed
+};
