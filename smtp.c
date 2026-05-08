@@ -62,3 +62,18 @@ static SSL *tls_connect(int sock) {
     SSL_CTX_free(ctx); // Free the context after creating the SSL object
     return ssl;
 }
+
+static int smtp_send_command(SSL *ssl, const char *cmd, int expected_code) {
+    char response[512];
+    int code;
+
+    SSL_write(ssl, cmd, strlen(cmd));
+    SSL_read(ssl, response, sizeof(response) - 1);
+
+    code = atoi(response);
+    if (code != expected_code) {
+        printf("Error: expected %d but got %d - %s\n", expected_code, code, response);
+        return 0;
+    }
+    return 1;
+}
