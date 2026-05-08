@@ -77,3 +77,51 @@ static int smtp_send_command(SSL *ssl, const char *cmd, int expected_code) {
     }
     return 1;
 }
+
+static int smtp_send(const Email *email) {
+    int sock;
+    SSL *ssl;
+    char cmd[512];
+
+    /* Phase 1: Establish TCP connection */
+    sock = tcp_connect("smtp.gmail.com", "587");
+    if (sock < 0) return 0;
+
+    /* Phase 2: Upgrade TLS */
+    ssl = tls_connect(sock);
+    if (ssl == NULL) {
+        close(sock);
+        return 0;
+    }
+
+    /* Phase 3: SMTP Authentication and Sending (Dialogue) */
+    smtp_send_command(ssl, "EHLO localhost\r\n", 250);
+    smtp_send_command(ssl, "AUTH LOGIN\r\n", 334);
+
+    // Base64 encode username and password here and send them
+    snprintf(cmd, sizeof(cmd), "%s\r\n", "your_base64_username");
+    smtp_send_command(ssl, cmd, 334);
+
+    snprintf(cmd, sizeof(cmd), "%s\r\n", "your_base64_password");
+    smtp_send_command(ssl, cmd, 334);
+
+    snprintf(cmd, sizeof(cmd), "MAIL FROM:<%s>\r\n", email->from);
+    smtp_send_command(ssl, cmd, 250);
+
+    snprintf(cmd, sizeof(cmd), "RCPT TO:<%s>\r\n", email->to);
+    smtp_send_command(ssl, cmd, 250);
+
+    snprintf(cmd, sizeof(cmd), "DATA\r\n", 334);
+    
+    snprintf(cmd, sizeof(cmd), 
+        "From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n%s\r\n.\r\n", 
+        email->from, email->to, email->subject, email->body);
+    
+    SSL_write(ssl, cmd, strlen(cmd));
+
+    /* Phase 4: Teardown */
+    smtp_send_command(ssl, "QUIT\r\n", 221);
+    SSL_free(ssl);
+    
+    return 1;
+}
