@@ -16,7 +16,7 @@ static int tcp_connect(const char *host, const char *port) {
     hints.ai_socktype = SOCK_STREAM;
 
     if (getaddrinfo(host, port, &hints, &res) != 0) {
-        printf("Error: could not resolve host %s:%s\n", host);
+        printf("Error: could not resolve host %s:%s\n", host, port);
         return -1;
     }
 
@@ -90,7 +90,7 @@ static int smtp_send(const Email *email) {
     /* Phase 2: Upgrade TLS */
     ssl = tls_connect(sock);
     if (ssl == NULL) {
-        close(sock);
+        // close(sock);
         return 0;
     }
 
@@ -119,8 +119,8 @@ static int smtp_send(const Email *email) {
     snprintf(cmd, sizeof(cmd), "RCPT TO:<%s>\r\n", email->to);
     smtp_send_command(ssl, cmd, 250);
 
-    snprintf(cmd, sizeof(cmd), "DATA\r\n", 334);
-    
+    smtp_send_command(ssl, "DATA\r\n", 354);
+
     snprintf(cmd, sizeof(cmd), 
         "From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n%s\r\n.\r\n", 
         email->from, email->to, email->subject, email->body);
