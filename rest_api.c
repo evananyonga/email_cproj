@@ -55,4 +55,17 @@ static int rest_api_send(const Email *email) {
     curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
     curl_easy_setopt(curl, CURLOPT_POSTFIELDS, json);
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback);
+
+    res = curl_easy_perform(curl);
+    
+    if (res != CURLE_OK) {
+        printf("Error: curl failed - %s\n", curl_easy_strerror(res));
+        curl_slist_free_all(headers);
+        curl_easy_cleanup(curl);
+        return 0;
+    }
+
+    curl_slist_free_all(headers);
+    curl_easy_cleanup(curl);
+    return 1;
 }
