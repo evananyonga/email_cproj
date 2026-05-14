@@ -30,4 +30,11 @@ static int rest_api_send(const Email *email) {
         printf("Error: SENDGRID_API_KEY or SENDGRID_FROM environment variables not set\n");
         return 0;
     }
+
+    snprintf(json, sizeof(json),
+        "{ \"personalizations\": [ { \"to\": [ { \"email\": \"%s\" } ] } ], "
+        "\"from\": { \"email\": \"%s\" }, "
+        "\"subject\": \"%s\", "
+        "\"content\": [ { \"type\": \"text/plain\", \"value\": \"%s\" } ] }",
+        email->to, from, email->subject, email->body);
 }
