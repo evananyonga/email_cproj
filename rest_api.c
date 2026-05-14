@@ -37,4 +37,6 @@ static int rest_api_send(const Email *email) {
         "\"subject\": \"%s\", "
         "\"content\": [ { \"type\": \"text/plain\", \"value\": \"%s\" } ] }",
         email->to, from, email->subject, email->body);
+
+    snprintf(auth, sizeof(auth), "Authorization: Bearer %s", api_key);
 }
