@@ -15,3 +15,19 @@ static size_t write_callback(void *contents, size_t size, size_t nmemb, void *us
 
     return total;
 }
+
+static int rest_api_send(const Email *email) {
+    CURL *curl;
+    CURLcode res;
+
+    char json[1024];
+    char auth[256];
+    
+    const char *api_key = getenv("SENDGRID_API_KEY");
+    const char *from = getenv("SENDGRID_FROM");
+
+    if (api_key == NULL || from == NULL) {
+        printf("Error: SENDGRID_API_KEY or SENDGRID_FROM environment variables not set\n");
+        return 0;
+    }
+}
