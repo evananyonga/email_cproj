@@ -39,4 +39,20 @@ static int rest_api_send(const Email *email) {
         email->to, from, email->subject, email->body);
 
     snprintf(auth, sizeof(auth), "Authorization: Bearer %s", api_key);
+
+    curl = curl_easy_init();
+    
+    if (curl == NULL) {
+        printf("Error: could not initialize curl\n");
+        return 0;
+    }
+
+    struct curl_slist *headers = NULL;
+    headers = curl_slist_append(headers, "Content-Type: application/json");
+    headers = curl_slist_append(headers, auth);
+
+    curl_easy_setopt(curl, CURLOPT_URL, "https://api.sendgrid.com/v3/mail/send");
+    curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, json);
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback);
 }
