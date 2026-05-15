@@ -9,6 +9,7 @@ static size_t write_callback(void *contents, size_t size, size_t nmemb, void *us
     // Unused callback suppression in write_callback statement before the fn is used.
     /** static size_t __attribute__((unused)) write_callback(void *contents, size_t size, size_t nmemb, void *userp) { */
     // Handle the response data here
+    printf("Debug: write_callback called\n");
     size_t total = size * nmemb;
     (void)userp; // Unused parameter
     printf("SendGrid response: %.*s\n", (int)total, (char *)contents);
@@ -51,13 +52,31 @@ static int rest_api_send(const Email *email) {
     headers = curl_slist_append(headers, "Content-Type: application/json");
     headers = curl_slist_append(headers, auth);
 
+    curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
     curl_easy_setopt(curl, CURLOPT_URL, "https://api.sendgrid.com/v3/mail/send");
     curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
     curl_easy_setopt(curl, CURLOPT_POSTFIELDS, json);
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback);
+    // printf("curl result: %s\n", curl_easy_strerror(res));
+    // if (http_code == 202) {
+    //     printf("Email accepted by SendGrid API\n");
+    // } else {
+    //     printf("Unexpected HTTP status: %ld\n", http_code);
+    //     return 0;
+    // }
+
+    // printf("Debug url: https://api.sendgrid.com/v3/mail/send\n");
+    // printf("Debug auth: %s\n", auth);
+    // printf("Debug json: %s\n", json);
 
     res = curl_easy_perform(curl);
-    
+
+    long http_code = 0;
+    curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
+    printf("HTTP status: %ld\n", http_code);
+
+    printf("Debug result: %u %s\n", (unsigned int)res, curl_easy_strerror(res));
+
     if (res != CURLE_OK) {
         printf("Error: curl failed - %s\n", curl_easy_strerror(res));
         curl_slist_free_all(headers);
@@ -69,3 +88,9 @@ static int rest_api_send(const Email *email) {
     curl_easy_cleanup(curl);
     return 1;
 }
+
+Transport rest_api_transport = {
+    .name = "rest_api",
+    .send = rest_api_send,
+    .validate = NULL // No validation needed for REST API
+};

@@ -16,9 +16,9 @@ int main() {
         return 1;
     }
 
-    Transport *transport = get_transport("sendmail");
+    Transport *transport = get_transport("rest_api");
     if (transport == NULL) {
-        printf("Error: No transport found for sendmail\n");
+        printf("Error: No transport found for rest_api\n");
         return 1;
     }
 
