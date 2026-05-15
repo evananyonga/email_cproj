@@ -52,30 +52,13 @@ static int rest_api_send(const Email *email) {
     headers = curl_slist_append(headers, "Content-Type: application/json");
     headers = curl_slist_append(headers, auth);
 
-    curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+    // curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
     curl_easy_setopt(curl, CURLOPT_URL, "https://api.sendgrid.com/v3/mail/send");
     curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
     curl_easy_setopt(curl, CURLOPT_POSTFIELDS, json);
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback);
-    // printf("curl result: %s\n", curl_easy_strerror(res));
-    // if (http_code == 202) {
-    //     printf("Email accepted by SendGrid API\n");
-    // } else {
-    //     printf("Unexpected HTTP status: %ld\n", http_code);
-    //     return 0;
-    // }
-
-    // printf("Debug url: https://api.sendgrid.com/v3/mail/send\n");
-    // printf("Debug auth: %s\n", auth);
-    // printf("Debug json: %s\n", json);
 
     res = curl_easy_perform(curl);
-
-    long http_code = 0;
-    curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
-    printf("HTTP status: %ld\n", http_code);
-
-    printf("Debug result: %u %s\n", (unsigned int)res, curl_easy_strerror(res));
 
     if (res != CURLE_OK) {
         printf("Error: curl failed - %s\n", curl_easy_strerror(res));
