@@ -19,6 +19,8 @@ typedef struct {
     char *rest_api_key;
 } Config;
 
+Config *load_config(const char *path);
+void free_config(Config *config);
 void print_config(Config *config);
 
 #endif // CONFIG_H
