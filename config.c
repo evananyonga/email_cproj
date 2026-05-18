@@ -13,4 +13,12 @@ Config *load_config(const char *path) {
         printf("Error: Could not open config file '%s'\n", path);
         return NULL;
     }
+
+    config = malloc(sizeof(Config));
+    if (config == NULL) {
+        printf("Error: Could not allocate memory for config\n");
+        fclose(file);
+        return NULL;
+    }
+    memset(config, 0, sizeof(Config)); // Initialize all fields to NULL
 }
