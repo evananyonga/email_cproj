@@ -7,8 +7,9 @@ Config *load_config(const char *path) {
     FILE *file;
     char line[256];
     Config *config;
+    printf("%s\n", line);
 
-    file = f(open(path, "r"));
+    file = fopen(path, "r");
     if (file == NULL) {
         printf("Error: Could not open config file '%s'\n", path);
         return NULL;
@@ -39,5 +40,16 @@ Config *load_config(const char *path) {
         *equals = '\0';
         key = line;
         value = equals + 1;
+
+        /* Remove trailing newline and space from key*/
+        while (*key && (*key == ' ' || *key == '\t')) key++;
+        char *end = equals - 1;
+        while (end > key && (*end == ' ' || *end == '\t' || *end == '\n')) *end--  = '\0';
+
+        /* Remove leading and trailing whitespace from value */
+        while (*value && (*value == ' ' || *value == '\t')) value++;
+        end = value + strlen(value) - 1;
+        while (end > value && (*end == '\n' || *end == '\r' || *end == ' ')) *end-- = '\0';
+
     }
 }
