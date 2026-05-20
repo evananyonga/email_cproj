@@ -66,3 +66,19 @@ Config *load_config(const char *path) {
     fclose(file);
     return config;
 }
+
+void free_config(Config *conf) {
+    if (conf == NULL) return;
+
+    free(conf->default_backend);
+    free(conf->sendmail_path);
+    free(conf->smtp_host);
+    free(conf->smtp_port);
+    free(conf->smtp_user);
+    free(conf->smtp_password);
+    free(conf->smtp_tls);
+    free(conf->rest_provider_url);
+    free(conf->rest_api_key);
+
+    free(conf);
+}
