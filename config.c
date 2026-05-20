@@ -82,3 +82,21 @@ void free_config(Config *conf) {
 
     free(conf);
 }
+
+void print_config(const Config *conf) {
+    if (conf == NULL) {
+        printf("Config is NULL\n");
+        return;
+    }
+
+    printf("Config:\n");
+    printf("  default_backend: %s\n", conf->default_backend ? conf->default_backend : "NULL");
+    printf("  sendmail_path: %s\n", conf->sendmail_path ? conf->sendmail_path : "NULL");
+    printf("  smtp_host: %s\n", conf->smtp_host ? conf->smtp_host : "NULL");
+    printf("  smtp_port: %s\n", conf->smtp_port ? conf->smtp_port : "NULL");
+    printf("  smtp_user: %s\n", conf->smtp_user ? conf->smtp_user : "NULL");
+    printf("  smtp_password: %s\n", conf->smtp_password ? conf->smtp_password : "NULL");
+    printf("  smtp_tls: %s\n", conf->smtp_tls ? conf->smtp_tls : "NULL");
+    printf("  rest_provider_url: %s\n", conf->rest_provider_url ? conf->rest_provider_url : "NULL");
+    printf("  rest_api_key: %s\n", conf->rest_api_key ? conf->rest_api_key : "NULL");
+}
