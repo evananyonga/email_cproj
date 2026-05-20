@@ -51,5 +51,18 @@ Config *load_config(const char *path) {
         end = value + strlen(value) - 1;
         while (end > value && (*end == '\n' || *end == '\r' || *end == ' ')) *end-- = '\0';
 
+        /* Allocate memory for the config values */
+        if (strcmp(key, "default_backend") == 0) config->default_backend = strdup(value);
+        else if (strcmp(key, "sendmail_path") == 0) config->sendmail_path = strdup(value);
+        else if (strcmp(key, "smtp_host") == 0) config->smtp_host = strdup(value);
+        else if (strcmp(key, "smtp_port") == 0) config->smtp_port = strdup(value);
+        else if (strcmp(key, "smtp_user") == 0) config->smtp_user = strdup(value);
+        else if (strcmp(key, "smtp_password") == 0) config->smtp_password = strdup(value);
+        else if (strcmp(key, "smtp_tls") == 0) config->smtp_tls = strdup(value);
+        else if (strcmp(key, "rest_provider_url") == 0) config->rest_provider_url = strdup(value);
+        else if (strcmp(key, "rest_api_key") == 0) config->rest_api_key = strdup(value);
     }
+
+    fclose(file);
+    return config;
 }
