@@ -20,5 +20,24 @@ Config *load_config(const char *path) {
         fclose(file);
         return NULL;
     }
-    memset(config, 0, sizeof(Config)); // Initialize all fields to NULL
+    memset(config, 0, sizeof(Config)); // Initialize all char fields to NULL
+
+    while (fgets(line, sizeof(line), file)) {
+        char *key;
+        char *value;
+        char *equals;
+
+        /* skip comments and blank lines*/
+        // if (line[0] == '#' || line[0] == '\n') continue;
+        if (line[0] == '#' || line[0] == '\n') {
+            continue;
+        }
+
+        equals = strchr(line, '=');
+        if (equals == NULL) continue;
+
+        *equals = '\0';
+        key = line;
+        value = equals + 1;
+    }
 }
