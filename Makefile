@@ -6,7 +6,7 @@ LDFLAGS = -L/usr/local/opt/openssl/lib -lssl -lcrypto -L/usr/local/opt/curl/lib 
 
 # Files
 TARGET = email
-OBJS = main.o email.o transport.o sendmail.o smtp.o rest_api.o
+OBJS = main.o email.o transport.o sendmail.o smtp.o rest_api.o config.o
 
 .PHONY: clean
 
@@ -32,6 +32,9 @@ smtp.o: smtp.c smtp.h
 
 rest_api.o: rest_api.c rest_api.h
 	$(CC) $(CFLAGS) -c rest_api.c
+
+config.o: config.c config.h
+	$(CC) $(CFLAGS) -c config.c
 
 # Clean rule to remove all built files
 clean:

@@ -7,7 +7,6 @@ Config *load_config(const char *path) {
     FILE *file;
     char line[256];
     Config *config;
-    printf("%s\n", line);
 
     file = fopen(path, "r");
     if (file == NULL) {
@@ -83,7 +82,7 @@ void free_config(Config *conf) {
     free(conf);
 }
 
-void print_config(const Config *conf) {
+void print_config(Config *conf) {
     if (conf == NULL) {
         printf("Config is NULL\n");
         return;
