@@ -8,7 +8,7 @@ int main() {
     Email email;
     Config *config;
     char config_path[256];
-    snprintf(config_path, sizeof(config_path), "%s/email_app/config", getenv("HOME"));
+    snprintf(config_path, sizeof(config_path), "%s/C/email_app/config", getenv("HOME"));
 
     config = load_config(config_path);
     if (config == NULL) {

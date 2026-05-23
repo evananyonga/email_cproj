@@ -10,6 +10,7 @@ Config *load_config(const char *path) {
 
     file = fopen(path, "r");
     if (file == NULL) {
+        perror("Error opening config file");
         printf("Error: Could not open config file '%s'\n", path);
         return NULL;
     }
@@ -58,6 +59,8 @@ Config *load_config(const char *path) {
         else if (strcmp(key, "smtp_user") == 0) config->smtp_user = strdup(value);
         else if (strcmp(key, "smtp_password") == 0) config->smtp_password = strdup(value);
         else if (strcmp(key, "smtp_tls") == 0) config->smtp_tls = strdup(value);
+        else if (strcmp(key, "smtp_from") == 0) config->smtp_from = strdup(value);
+        else if (strcmp(key, "smtp_to") == 0) config->smtp_to = strdup(value);
         else if (strcmp(key, "rest_provider_url") == 0) config->rest_provider_url = strdup(value);
         else if (strcmp(key, "rest_api_key") == 0) config->rest_api_key = strdup(value);
     }
@@ -76,6 +79,8 @@ void free_config(Config *conf) {
     free(conf->smtp_user);
     free(conf->smtp_password);
     free(conf->smtp_tls);
+    free(conf->smtp_from);
+    free(conf->smtp_to);
     free(conf->rest_provider_url);
     free(conf->rest_api_key);
 
@@ -96,6 +101,8 @@ void print_config(Config *conf) {
     printf("  smtp_user: %s\n", conf->smtp_user ? conf->smtp_user : "NULL");
     printf("  smtp_password: %s\n", conf->smtp_password ? conf->smtp_password : "NULL");
     printf("  smtp_tls: %s\n", conf->smtp_tls ? conf->smtp_tls : "NULL");
+    printf("  smtp_from: %s\n", conf->smtp_from ? conf->smtp_from : "NULL");
+    printf("  smtp_to: %s\n", conf->smtp_to ? conf->smtp_to : "NULL");
     printf("  rest_provider_url: %s\n", conf->rest_provider_url ? conf->rest_provider_url : "NULL");
     printf("  rest_api_key: %s\n", conf->rest_api_key ? conf->rest_api_key : "NULL");
 }

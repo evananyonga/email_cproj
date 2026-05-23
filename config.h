@@ -13,6 +13,8 @@ typedef struct {
     char *smtp_user;
     char *smtp_password;
     char *smtp_tls;
+    char *smtp_from;
+    char *smtp_to;
 
     /* REST */
     char *rest_provider_url;
