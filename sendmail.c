@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include "sendmail.h"
 
-static int sendmail_send(const Email *email) {
+static int sendmail_send(const Email *email, const Config *config) {
 
+    (void)config; // Unused parameter
     char command[256];
     snprintf(command, sizeof(command), "msmtp %s", email->to);
     

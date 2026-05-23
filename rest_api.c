@@ -17,7 +17,8 @@ static size_t write_callback(void *contents, size_t size, size_t nmemb, void *us
     return total;
 }
 
-static int rest_api_send(const Email *email) {
+static int rest_api_send(const Email *email, const Config *config) {
+    (void)config; // Unused parameter
     CURL *curl;
     CURLcode res;
 

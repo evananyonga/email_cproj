@@ -78,7 +78,8 @@ static int smtp_send_command(SSL *ssl, const char *cmd, int expected_code) {
     return 1;
 }
 
-static int smtp_send(const Email *email) {
+static int smtp_send(const Email *email, const Config *config) {
+    (void)config; // Unused parameter
     int sock;
     SSL *ssl;
     char cmd[512];
