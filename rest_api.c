@@ -17,18 +17,19 @@ static size_t write_callback(void *contents, size_t size, size_t nmemb, void *us
     return total;
 }
 
-static int rest_api_send(const Email *email) {
+static int rest_api_send(const Email *email, const Config *config) {
     CURL *curl;
     CURLcode res;
 
     char json[1024];
     char auth[256];
     
-    const char *api_key = getenv("SENDGRID_API_KEY");
-    const char *from = getenv("SENDGRID_FROM");
+    const char *url = config->rest_provider_url;
+    const char *api_key = config->rest_api_key;
+    const char *from = config->smtp_user; // Use smtp_user as the "from" email for REST API
 
-    if (api_key == NULL || from == NULL) {
-        printf("Error: SENDGRID_API_KEY or SENDGRID_FROM environment variables not set\n");
+    if (url == NULL || api_key == NULL || from == NULL) {
+        printf("Error: rest_provider_url, rest_api_key or smtp_from variables not set in config\n");
         return 0;
     }
 
@@ -53,7 +54,7 @@ static int rest_api_send(const Email *email) {
     headers = curl_slist_append(headers, auth);
 
     // curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
-    curl_easy_setopt(curl, CURLOPT_URL, "https://api.sendgrid.com/v3/mail/send");
+    curl_easy_setopt(curl, CURLOPT_URL, config->rest_provider_url);
     curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
     curl_easy_setopt(curl, CURLOPT_POSTFIELDS, json);
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback);

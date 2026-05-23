@@ -36,7 +36,7 @@ int main() {
         return 1;
     }
 
-    transport->send(&email);
+    transport->send(&email, config);
     free_config(config);
 
     return 0;

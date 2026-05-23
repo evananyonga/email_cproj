@@ -2,10 +2,11 @@
 #define TRANSPORT_H
 
 #include "email.h"
+#include "config.h"
 
 typedef struct {
     const char* name;
-    int (*send)(const Email *email);
+    int (*send)(const Email *email, const Config *config);
     int (*validate)(void);
 } Transport;
 
