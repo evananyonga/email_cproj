@@ -96,11 +96,11 @@ static int smtp_send(const Email *email, const Config *config) {
     }
 
     /* Phase 3: SMTP Authentication and Sending (Dialogue) */
-    const char *smtp_user = getenv("SMTP_USER");
-    const char *smtp_pass = getenv("SMTP_PASS");
+    const char *smtp_user = config->smtp_user;
+    const char *smtp_pass = config->smtp_password;
 
     if (smtp_user == NULL || smtp_pass == NULL) {
-        printf("Error: SMTP_USER or SMTP_PASS not set\n");
+        printf("Error: smtp_user or smtp_pass not set\n");
         return 0;
     }
 

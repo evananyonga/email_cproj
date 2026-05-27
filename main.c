@@ -18,8 +18,8 @@ int main() {
 
     print_config(config);
 
-    email.from = config->smtp_user;
-    email.to = config->smtp_user;
+    email.from = config->smtp_from;
+    email.to = config->smtp_to;
     email.subject = "Hello from your the other side";
     email.body = "Be Afraid, be very afraid.  I am coming for you.";
 
