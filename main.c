@@ -16,7 +16,7 @@ int main() {
         return 1;
     }
 
-    print_config(config);
+    // print_config(config);
 
     email.from = config->smtp_from;
     email.to = config->smtp_to;
@@ -29,12 +29,14 @@ int main() {
         return 1;
     }
 
-    Transport *transport = get_transport("rest_api");
+    Transport *transport = get_transport(config->default_backend);
     if (transport == NULL) {
-        printf("Error: No transport found for rest_api\n");
+        printf("Error: No transport found for %s\n", config->default_backend);
         free_config(config);
         return 1;
     }
+
+    // printf("DEBUG email from: %s\n", email.from ? email.from : "NULL");
 
     transport->send(&email, config);
     free_config(config);

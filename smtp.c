@@ -53,6 +53,7 @@ static SSL *tls_connect(int sock) {
     ssl = SSL_new(ctx);
     SSL_set_fd(ssl, sock);
     if (SSL_connect(ssl) != 1) {
+        ERR_print_errors_fp(stderr);
         printf("Error: TLS handshake failed\n");
         SSL_free(ssl);
         SSL_CTX_free(ctx);
@@ -68,6 +69,7 @@ static int smtp_send_command(SSL *ssl, const char *cmd, int expected_code) {
     int code;
 
     SSL_write(ssl, cmd, strlen(cmd));
+    memset(response, 0, sizeof(response));
     SSL_read(ssl, response, sizeof(response) - 1);
 
     code = atoi(response);
@@ -78,14 +80,35 @@ static int smtp_send_command(SSL *ssl, const char *cmd, int expected_code) {
     return 1;
 }
 
+static void base64_encode(const char *input, char *output, size_t output_size) {
+    // Implement base64 encoding
+    const char table[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    int i = 0, j = 0, len = strlen(input);
+    unsigned char buf[3];
+    (void)output_size;
+    
+    while (len > 0) {
+        int chunk_size = (len > 3) ? 3 : len;
+        memset(buf, 0, sizeof(buf));
+        memcpy(buf, input + i, chunk_size);
+
+        output[j++] = table[buf[0] >> 2];
+        output[j++] = table[((buf[0] & 0x03) << 4) | (buf[1] >> 4)];
+        output[j++] = (chunk_size > 1) ? table[((buf[1] & 0x0F) << 2) | (buf[2] >> 6)] : '=';
+        output[j++] = (chunk_size > 2) ? table[buf[2] & 0x3F] : '=';
+
+        i += chunk_size;
+        len -= chunk_size;
+    }
+}
+
 static int smtp_send(const Email *email, const Config *config) {
-    (void)config; // Unused parameter
     int sock;
     SSL *ssl;
     char cmd[512];
 
     /* Phase 1: Establish TCP connection */
-    sock = tcp_connect("smtp.gmail.com", "587");
+    sock = tcp_connect("smtp.gmail.com", config->smtp_port);
     if (sock < 0) return 0;
 
     /* Phase 2: Upgrade TLS */
@@ -99,27 +122,42 @@ static int smtp_send(const Email *email, const Config *config) {
     const char *smtp_user = config->smtp_user;
     const char *smtp_pass = config->smtp_password;
 
+    char auth_plain[512];
+    char auth_encoded[768];
+    // int auth_len;
+
     if (smtp_user == NULL || smtp_pass == NULL) {
         printf("Error: smtp_user or smtp_pass not set\n");
         return 0;
     }
 
+    char response[512];
+    
+    do {
+        memset(response, 0, sizeof(response));
+        SSL_read(ssl, response, sizeof(response) - 1);
+    } while (strncmp(response, "220-", 4) == 0);
+
+    /* EHLO localhost */
     smtp_send_command(ssl, "EHLO localhost\r\n", 250);
-    smtp_send_command(ssl, "AUTH LOGIN\r\n", 334);
+
+    // auth_len = snprintf(auth_plain, sizeof(auth_plain), 
+    //                     "%c%s%c%s", 0, config->smtp_user, 0, config->smtp_password); 
 
     // Base64 encode username and password here and send them
-    snprintf(cmd, sizeof(cmd), "%s\r\n", smtp_user);
-    smtp_send_command(ssl, cmd, 334);
+    base64_encode(auth_plain, auth_encoded, sizeof(auth_encoded));
 
-    snprintf(cmd, sizeof(cmd), "%s\r\n", smtp_pass);
-    smtp_send_command(ssl, cmd, 334);
+    snprintf(cmd, sizeof(cmd), "AUTH PLAIN %s\r\n", auth_encoded);
+    smtp_send_command(ssl, cmd, 235);
 
+    /* envelop */
     snprintf(cmd, sizeof(cmd), "MAIL FROM:<%s>\r\n", email->from);
     smtp_send_command(ssl, cmd, 250);
 
     snprintf(cmd, sizeof(cmd), "RCPT TO:<%s>\r\n", email->to);
     smtp_send_command(ssl, cmd, 250);
 
+    /* message */
     smtp_send_command(ssl, "DATA\r\n", 354);
 
     snprintf(cmd, sizeof(cmd), 

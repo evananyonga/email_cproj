@@ -23,7 +23,7 @@ Config *load_config(const char *path) {
     }
     memset(config, 0, sizeof(Config)); // Initialize all char fields to NULL
 
-    while (fgets(line, sizeof(line), file)) {
+    while (fgets(line, sizeof(line), file) != NULL) {
         char *key;
         char *value;
         char *equals;
@@ -34,7 +34,7 @@ Config *load_config(const char *path) {
             continue;
         }
 
-        equals = strchr(line, '=');
+        equals = strchr(line, ':');
         if (equals == NULL) continue;
 
         *equals = '\0';
