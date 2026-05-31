@@ -80,10 +80,10 @@ static int smtp_send_command(SSL *ssl, const char *cmd, int expected_code) {
     return 1;
 }
 
-static void base64_encode(const char *input, char *output, size_t output_size) {
+static void base64_encode_n(const char *input, int len, char *output, int output_size) {
     // Implement base64 encoding
     const char table[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-    int i = 0, j = 0, len = strlen(input);
+    int i = 0, j = 0;
     unsigned char buf[3];
     (void)output_size;
     
@@ -124,7 +124,9 @@ static int smtp_send(const Email *email, const Config *config) {
 
     char auth_plain[512];
     char auth_encoded[768];
-    // int auth_len;
+    int auth_len;
+    int user_len = strlen(config->smtp_user);
+    int pass_len = strlen(config->smtp_password);
 
     if (smtp_user == NULL || smtp_pass == NULL) {
         printf("Error: smtp_user or smtp_pass not set\n");
@@ -141,11 +143,14 @@ static int smtp_send(const Email *email, const Config *config) {
     /* EHLO localhost */
     smtp_send_command(ssl, "EHLO localhost\r\n", 250);
 
-    // auth_len = snprintf(auth_plain, sizeof(auth_plain), 
-    //                     "%c%s%c%s", 0, config->smtp_user, 0, config->smtp_password); 
+    auth_plain[0] = '\0';
+    memcpy(auth_plain + 1, config->smtp_user, user_len);
+    auth_plain[1 + user_len] = '\0';
+    memcpy(auth_plain + 2 + user_len, config->smtp_password, pass_len);
+    auth_len = 1 + user_len + 1 + pass_len; 
 
     // Base64 encode username and password here and send them
-    base64_encode(auth_plain, auth_encoded, sizeof(auth_encoded));
+    base64_encode_n(auth_plain, auth_len, auth_encoded, sizeof(auth_encoded));
 
     snprintf(cmd, sizeof(cmd), "AUTH PLAIN %s\r\n", auth_encoded);
     smtp_send_command(ssl, cmd, 235);
