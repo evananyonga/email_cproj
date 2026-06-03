@@ -100,6 +100,8 @@ static void base64_encode_n(const char *input, int len, char *output, int output
         i += chunk_size;
         len -= chunk_size;
     }
+    output[j] = '\0';
+    (void)output_size; // To avoid unused parameter warning
 }
 
 static int smtp_send(const Email *email, const Config *config) {
@@ -147,7 +149,7 @@ static int smtp_send(const Email *email, const Config *config) {
     memcpy(auth_plain + 1, config->smtp_user, user_len);
     auth_plain[1 + user_len] = '\0';
     memcpy(auth_plain + 2 + user_len, config->smtp_password, pass_len);
-    auth_len = 1 + user_len + 1 + pass_len; 
+    auth_len = 1 + user_len + 1 + pass_len;
 
     // Base64 encode username and password here and send them
     base64_encode_n(auth_plain, auth_len, auth_encoded, sizeof(auth_encoded));
@@ -172,7 +174,7 @@ static int smtp_send(const Email *email, const Config *config) {
     SSL_write(ssl, cmd, strlen(cmd));
 
     /* Phase 4: Teardown */
-    smtp_send_command(ssl, "QUIT\r\n", 221);
+    smtp_send_command(ssl, "QUIT\r\n", 250);
     SSL_free(ssl);
     
     return 1;
