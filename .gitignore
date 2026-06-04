@@ -1,5 +1,6 @@
 email
 config
+test_email
 
 *.o
 *.env

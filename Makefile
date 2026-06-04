@@ -8,7 +8,7 @@ LDFLAGS = -L/usr/local/opt/openssl/lib -lssl -lcrypto -L/usr/local/opt/curl/lib 
 TARGET = email
 OBJS = main.o email.o transport.o sendmail.o smtp.o rest_api.o config.o
 
-.PHONY: clean
+.PHONY: clean test
 
 # Default rule - build the final binary
 $(TARGET): $(OBJS)
@@ -36,6 +36,16 @@ rest_api.o: rest_api.c rest_api.h
 config.o: config.c config.h
 	$(CC) $(CFLAGS) -c config.c
 
+# Test Binary
+test_email: test_email.o email.o
+	$(CC) $(CFLAGS) test_email.o email.o -o test_email
+
+test_email.o: test_email.c email.h
+	$(CC) $(CFLAGS) -c test_email.c
+
+test: test_email
+	./test_email
+
 # Clean rule to remove all built files
 clean:
-	rm -f $(TARGET) $(OBJS)
+	rm -f $(TARGET) $(OBJS) test_email.o test_email 
