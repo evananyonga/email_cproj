@@ -3,7 +3,7 @@
 #include "email.h"
 
 int validate_email(Email *email) {
-    if (email->from == NULL || email->from == 0) {
+    if (email->from == NULL || strlen(email->from) == 0) {
         printf("Error: From field is empty\n");
         return 0; // Invalid email
     }
