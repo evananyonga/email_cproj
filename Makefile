@@ -11,7 +11,7 @@ OBJS = main.o email.o transport.o sendmail.o smtp.o rest_api.o config.o
 .PHONY: clean test
 
 # Default rule - build the final binary
-$(TARGET): $(OBJS)
+$(TARGET): test $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) $(LDFLAGS) -o $(TARGET)
 
 # Rule to compile each .c file to a .o object file
