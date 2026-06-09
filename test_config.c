@@ -29,3 +29,19 @@ static void create_test_config(void) {
 static void cleanup_test_config(void) {
     remove(TEST_CONFIG_PATH);
 }
+
+void test_config_missing_file(void) {
+    create_test_config();
+    cleanup_test_config();
+
+    Config *config = load_config(TEST_CONFIG_PATH);
+    TEST_ASSERT(config == NULL, "Expected NULL for missing config file");
+    free_config(config);
+}
+
+int main() {
+    TEST_RUN(test_config_missing_file);
+    TEST_SUMMARY();
+
+    return 0;
+}
