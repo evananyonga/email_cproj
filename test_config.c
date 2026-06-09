@@ -39,8 +39,19 @@ void test_config_missing_file(void) {
     free_config(config);
 }
 
+void test_config_loads_successfully(void) {
+    create_test_config();
+
+    Config *config = load_config(TEST_CONFIG_PATH);
+    TEST_ASSERT(config != NULL, "valid config loads successfully");
+    free_config(config);
+
+    cleanup_test_config();
+}
+
 int main() {
     TEST_RUN(test_config_missing_file);
+    TEST_RUN(test_config_loads_successfully);
     TEST_SUMMARY();
 
     return 0;
