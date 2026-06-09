@@ -25,3 +25,7 @@ static void create_test_config(void) {
 
     fclose(file);
 }
+
+static void cleanup_test_config(void) {
+    remove(TEST_CONFIG_PATH);
+}
