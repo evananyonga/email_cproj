@@ -40,12 +40,19 @@ config.o: config.c config.h
 test_email: test_email.o email.o
 	$(CC) $(CFLAGS) test_email.o email.o -o test_email
 
+test_config: test_config.o config.o
+	$(CC) $(CFLAGS) test_config.o config.o -o test_config
+
 test_email.o: test_email.c email.h
 	$(CC) $(CFLAGS) -c test_email.c
 
-test: test_email
+test_config.o: test_config.c config.h
+	$(CC) $(CFLAGS) -c test_config.c
+
+test: test_email test_config
 	./test_email
+	./test_config
 
 # Clean rule to remove all built files
 clean:
-	rm -f $(TARGET) $(OBJS) test_email.o test_email 
+	rm -f $(TARGET) $(OBJS) test_email.o test_email test_config.o test_config
