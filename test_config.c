@@ -49,9 +49,21 @@ void test_config_loads_successfully(void) {
     cleanup_test_config();
 }
 
+void test_config_default_exists(void) {
+    create_test_config();
+
+    Config *conf = load_config(TEST_CONFIG_PATH);
+    TEST_ASSERT(conf != NULL, "valid config loads successfully");
+    TEST_ASSERT(conf->default_backend != NULL, "default_backend should not be NULL");
+    free_config(conf);
+
+    cleanup_test_config();
+}
+
 int main() {
     TEST_RUN(test_config_missing_file);
     TEST_RUN(test_config_loads_successfully);
+    TEST_RUN(test_config_default_exists);
     TEST_SUMMARY();
 
     return 0;
