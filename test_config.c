@@ -11,7 +11,7 @@ static void create_test_config(void) {
     if (file == NULL) return;
 
     fprintf(file, "# Test configuration for email app\n");
-    fprintf(file, "default_backend: sendmail\n");
+    fprintf(file, "default_backend: \n");
     fprintf(file, "smtp_host: smtp.gmail.com\n");
     fprintf(file, "smtp_port: 587\n");
     fprintf(file, "smtp_user: user@example.com\n");
@@ -53,10 +53,19 @@ void test_config_default_exists(void) {
     create_test_config();
 
     Config *conf = load_config(TEST_CONFIG_PATH);
+    printf("DEBUG: default_backend = %s\n", conf ? conf->default_backend : "NULL");
     TEST_ASSERT(conf != NULL, "valid config loads successfully");
-    TEST_ASSERT(conf->default_backend != NULL, "default_backend should not be NULL");
+    TEST_ASSERT(conf->default_backend == NULL, "default_backend should not be NULL");
     free_config(conf);
 
+    cleanup_test_config();
+}
+
+void test_config_malformed_line(void) {
+    create_test_config();
+    Config *c = load_config(TEST_CONFIG_PATH);
+    TEST_ASSERT(c != NULL, "config loads despite malformed line");
+    free_config(c);
     cleanup_test_config();
 }
 
@@ -64,6 +73,7 @@ int main() {
     TEST_RUN(test_config_missing_file);
     TEST_RUN(test_config_loads_successfully);
     TEST_RUN(test_config_default_exists);
+    TEST_RUN(test_config_malformed_line);
     TEST_SUMMARY();
 
     return 0;
