@@ -55,16 +55,6 @@ void test_config_fields(void) {
     Config *conf = load_config(TEST_CONFIG_PATH);
     TEST_ASSERT(conf != NULL, "valid config loads successfully");
 
-    printf("DEBUG: default_backend=%s\n", conf->default_backend ? conf->default_backend : "NULL");
-    printf("DEBUG: smtp_host=%s\n", conf->smtp_host ? conf->smtp_host : "NULL");
-    printf("DEBUG: smtp_port=%s\n", conf->smtp_port ? conf->smtp_port : "NULL");
-    printf("DEBUG: smtp_user=%s\n", conf->smtp_user ? conf->smtp_user : "NULL");
-    printf("DEBUG: smtp_password=%s\n", conf->smtp_password ? conf->smtp_password : "NULL");
-    printf("DEBUG: smtp_from=%s\n", conf->smtp_from ? conf->smtp_from : "NULL");
-    printf("DEBUG: smtp_to=%s\n", conf->smtp_to ? conf->smtp_to : "NULL");
-    printf("DEBUG: rest_api_key=%s\n", conf->rest_api_key ? conf->rest_api_key : "NULL");
-    printf("DEBUG: rest_provider_url=%s\n", conf->rest_provider_url ? conf->rest_provider_url : "NULL");
-
     TEST_ASSERT(strcmp(conf->default_backend, "smtp") == 0, "default_backend should be smtp");
     TEST_ASSERT(strcmp(conf->smtp_host, "smtp.gmail.com") == 0, "smtp_host should be smtp.gmail.com");
     TEST_ASSERT(strcmp(conf->smtp_port, "587") == 0, "smtp_port should be 587");
