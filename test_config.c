@@ -14,13 +14,14 @@ static void create_test_config(void) {
     fprintf(file, "default_backend: smtp\n");
     fprintf(file, "smtp_host: smtp.gmail.com\n");
     fprintf(file, "smtp_port: 587\n");
+    fprintf(file, "# This is a comment\n");
     fprintf(file, "smtp_user: user@example.com\n");
     fprintf(file, "smtp_password: password\n");
     fprintf(file, "smtp_from: from@example.com\n");
     fprintf(file, "smtp_to: to@example.com\n");
     fprintf(file, "rest_api_key: test_api_key\n");
-    fprintf(file, "rest_provider_url: https://rest.example.com/api\n");
     fprintf(file, "malformed value without equals\n");
+    fprintf(file, "rest_provider_url: https://rest.example.com/api\n");
 
     fclose(file);
 }
@@ -87,12 +88,21 @@ void test_config_malformed_line(void) {
     cleanup_test_config();
 }
 
+void test_config_handles_comments(void) {
+    create_test_config();
+    Config *c = load_config(TEST_CONFIG_PATH);
+    TEST_ASSERT(c != NULL, "config loads despite comments");
+    free_config(c);
+    cleanup_test_config();
+}
+
 int main() {
     TEST_RUN(test_config_missing_file);
     TEST_RUN(test_config_loads_successfully);
     TEST_RUN(test_config_fields);
     TEST_RUN(test_config_malformed_line);
+    TEST_RUN(test_config_handles_comments);
     TEST_SUMMARY();
 
-    return 0;
+    return tests_failed > 0 ? 1 : 0;
 }
