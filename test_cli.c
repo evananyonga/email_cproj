@@ -2,7 +2,7 @@
 #include "test_framework.h"
 #include "cli.h"
 
-void test_cli_no_arguments() {
+void test_cli_no_arguments(void) {
     int argc = 1;
     char *argv[] = {"./email"};
     Args *args = parse_args(argc, argv);

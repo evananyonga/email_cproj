@@ -2,6 +2,7 @@ email
 config
 test_email
 test_config
+test_cli
 
 *.o
 *.env
