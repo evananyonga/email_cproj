@@ -16,7 +16,6 @@ void print_usage(void) {
 }
 
 Args *parse_args(int argc, char *argv[]) {
-    (void)argv;
     if (argc <= 1) {
         printf("Error: No arguments provided.\n");
         print_usage();
