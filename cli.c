@@ -21,7 +21,19 @@ Args *parse_args(int argc, char *argv[]) {
         print_usage();
         return NULL;
     }
-    return NULL;
+
+    Args *args = malloc(sizeof(Args));
+    if (args == NULL) return NULL;
+
+    memset(args, 0, sizeof(Args));
+
+    for (int i = 1; i < argc; i++) {
+        if (strcmp(argv[i], "--to") == 0 && i + 1 < argc) {
+            args->to = strdup(argv[++i]);
+        }
+    }
+
+    return args;
 }
 
 void free_args(Args *a) {
