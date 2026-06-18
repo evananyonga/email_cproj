@@ -27,10 +27,10 @@ static int tcp_connect(const char *host, const char *port) {
         return -1;
     }
 
-if (connect(sock, res->ai_addr, res->ai_addrlen) != 0) {
-        printf("Error: could not connect to %s:%s\n", host, port);
-        freeaddrinfo(res);
-        return -1;
+    if (connect(sock, res->ai_addr, res->ai_addrlen) != 0) {
+            printf("Error: could not connect to %s:%s\n", host, port);
+            freeaddrinfo(res);
+            return -1;
     }
 
     freeaddrinfo(res);

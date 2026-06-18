@@ -19,9 +19,19 @@ void test_cli_valid_to_flag(void) {
     free_args(args);
 }
 
+void test_cli_valid_backend(void) {
+    int argc = 3;
+    char *argv[] = {"./email", "--backend", "smtp"};
+    Args *args = parse_args(argc, argv);
+    TEST_ASSERT(args != NULL, "valid --backend flag returns valid Args-non-NULL");
+    TEST_ASSERT(strcmp(args->backend, "smtp") == 0, "--backend flag sets correct value");
+    free_args(args);
+}
+
 int main() {
     TEST_RUN(test_cli_no_arguments);
     TEST_RUN(test_cli_valid_to_flag);
+    TEST_RUN(test_cli_valid_backend);
     TEST_SUMMARY();
     return 0;
 }
