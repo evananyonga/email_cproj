@@ -28,10 +28,18 @@ void test_cli_valid_backend(void) {
     free_args(args);
 }
 
+void test_cli_missing_value(void) {
+    int argc = 2;
+    char *argv[] = {"./email", "--to"};
+    Args *args = parse_args(argc, argv);
+    TEST_ASSERT(args == NULL, "missing value for --to parameter returns NULL");
+}
+
 int main() {
     TEST_RUN(test_cli_no_arguments);
     TEST_RUN(test_cli_valid_to_flag);
     TEST_RUN(test_cli_valid_backend);
+    TEST_RUN(test_cli_missing_value);
     TEST_SUMMARY();
     return 0;
 }
