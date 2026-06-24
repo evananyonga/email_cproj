@@ -35,13 +35,15 @@ Args *parse_args(int argc, char *argv[]) {
                 return NULL;
             }
             args->to = strdup(argv[++i]);
-            } else if (strcmp(argv[i], "--backend") == 0) {
-                if (i + 1 >= argc) {
-                    printf("Error: missing value for --backend parameter.\n");
-                    free_args(args);
-                    return NULL;
+        } else if (strcmp(argv[i], "--backend") == 0) {
+            if (i + 1 >= argc) {
+                printf("Error: missing value for --backend parameter.\n");
+                free_args(args);
+                return NULL;
             }
             args->backend = strdup(argv[++i]);
+        } else {
+            /* unknown/unsupported argument: ignore or handle as needed */
         }
     }
 
