@@ -29,8 +29,8 @@ void test_cli_valid_backend(void) {
 }
 
 void test_cli_invalid_argument(void) {
-    int argc = 3;
-    char *argv[] = {"./email", "--tikiroho", "somevalue"};
+    int argc = 2;
+    char *argv[] = {"./email", "--tikiroho"};
     Args *args = parse_args(argc, argv);
     TEST_ASSERT(args == NULL, "invalid argument returns NULL");
 }
