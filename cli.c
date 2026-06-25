@@ -44,6 +44,10 @@ Args *parse_args(int argc, char *argv[]) {
             args->backend = strdup(argv[++i]);
         } else {
             /* unknown/unsupported argument: ignore or handle as needed */
+            printf("Warning: unknown argument '%s'. Use --help for usage information.\n", argv[i]);
+            print_usage();
+            free_args(args);
+            return NULL;
         }
     }
 
