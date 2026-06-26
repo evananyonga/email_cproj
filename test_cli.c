@@ -42,12 +42,20 @@ void test_cli_missing_value(void) {
     TEST_ASSERT(args == NULL, "missing value for --to parameter returns NULL");
 }
 
+void test_cli_required_arguments(void) {
+    int argc = 3;
+    char *argv[] = {"./email", "--body", "Hello there!"};
+    Args *args = parse_args(argc, argv);
+    TEST_ASSERT(args == NULL, "missing value for --to parameter returns NULL");
+}
+
 int main() {
     TEST_RUN(test_cli_no_arguments);
     TEST_RUN(test_cli_valid_to_flag);
     TEST_RUN(test_cli_valid_backend);
     TEST_RUN(test_cli_invalid_argument);
     TEST_RUN(test_cli_missing_value);
+    TEST_RUN(test_cli_required_arguments);
     TEST_SUMMARY();
     return 0;
 }

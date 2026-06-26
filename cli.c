@@ -58,6 +58,13 @@ Args *parse_args(int argc, char *argv[]) {
         }
     }
 
+    if (args->to == NULL) {
+        printf("Error: --to is required\n");
+        print_usage();
+        free_args(args);
+        return NULL;
+    }
+
     return args;
 }
 
