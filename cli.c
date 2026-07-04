@@ -49,6 +49,13 @@ Args *parse_args(int argc, char *argv[]) {
                 return NULL;
             }
             args->body = strdup(argv[++i]);
+        } else if (strcmp(argv[i], "--from") == 0) {
+            if (i + 1 >= argc) {
+                printf("Error: missing value for --from parameter.\n");
+                free_args(args);
+                return NULL;
+            }
+            args->from = strdup(argv[++i]);
         } else {
             /* unknown/unsupported argument: ignore or handle as needed */
             printf("Warning: unknown argument '%s'. Use --help for usage information.\n", argv[i]);
