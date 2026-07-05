@@ -28,6 +28,15 @@ void test_cli_valid_from(void) {
     free_args(args);
 }
 
+void test_cli_valid_subject(void) {
+    int argc = 5;
+    char *argv[] = {"./email", "--subject", "Test Subject", "--to", "recipient@example.com"};
+    Args *args = parse_args(argc, argv);
+    TEST_ASSERT(args != NULL, "valid --subject flag returns valid Args-non-NULL");
+    TEST_ASSERT(strcmp(args->subject, "Test Subject") == 0, "--subject flag sets correct value");
+    free_args(args);
+}
+
 void test_cli_valid_backend(void) {
     int argc = 5;
     char *argv[] = {"./email", "--to", "recipient@example.com", "--backend", "smtp"};
@@ -62,6 +71,7 @@ int main() {
     TEST_RUN(test_cli_no_arguments);
     TEST_RUN(test_cli_valid_to_flag);
     TEST_RUN(test_cli_valid_from);
+    TEST_RUN(test_cli_valid_subject);
     TEST_RUN(test_cli_valid_backend);
     TEST_RUN(test_cli_invalid_argument);
     TEST_RUN(test_cli_missing_value);
