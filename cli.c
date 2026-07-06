@@ -102,5 +102,10 @@ Args *parse_args(int argc, char *argv[]) {
 
 void free_args(Args *a) {
     if (a == NULL) return;
-    free(a);
+    free(a->to);
+    free(a->from);
+    free(a->subject);
+    free(a->body);
+    free(a->backend);
+    // free(a);
 }
