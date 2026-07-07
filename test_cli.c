@@ -37,6 +37,15 @@ void test_cli_valid_subject(void) {
     free_args(args);
 }
 
+void test_cli_valid_port(void) {
+    int argc = 5;
+    char *argv[] = {"./email", "--port", "587", "--to", "recipient@example.com"};
+    Args *args = parse_args(argc, argv);
+    TEST_ASSERT(args != NULL, "valid --port flag returns valid Args-non-NULL");
+    TEST_ASSERT(strcmp(args->port, "587") == 0, "--port flag sets correct value");
+    free_args(args);
+}
+
 void test_cli_valid_backend(void) {
     int argc = 5;
     char *argv[] = {"./email", "--to", "recipient@example.com", "--backend", "smtp"};
@@ -72,6 +81,7 @@ int main() {
     TEST_RUN(test_cli_valid_to_flag);
     TEST_RUN(test_cli_valid_from);
     TEST_RUN(test_cli_valid_subject);
+    TEST_RUN(test_cli_valid_port);
     TEST_RUN(test_cli_valid_backend);
     TEST_RUN(test_cli_invalid_argument);
     TEST_RUN(test_cli_missing_value);
