@@ -55,6 +55,15 @@ void test_cli_valid_backend(void) {
     free_args(args);
 }
 
+void test_cli_valid_config(void) {
+    int argc = 5;
+    char *argv[] = {"./email", "--to", "recipient@example.com", "--config", "/path/to/config"};
+    Args *args = parse_args(argc, argv);
+    TEST_ASSERT(args != NULL, "valid --config flag returns valid Args-non-NULL");
+    TEST_ASSERT(strcmp(args->config_path, "/path/to/config") == 0, "--config flag sets correct value");
+    free_args(args);
+}   
+
 void test_cli_invalid_argument(void) {
     int argc = 2;
     char *argv[] = {"./email", "--tikiroho"};
@@ -83,6 +92,7 @@ int main() {
     TEST_RUN(test_cli_valid_subject);
     TEST_RUN(test_cli_valid_port);
     TEST_RUN(test_cli_valid_backend);
+    TEST_RUN(test_cli_valid_config);
     TEST_RUN(test_cli_invalid_argument);
     TEST_RUN(test_cli_missing_value);
     TEST_RUN(test_cli_required_arguments);
