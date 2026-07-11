@@ -78,9 +78,8 @@ Args *parse_args(int argc, char *argv[]) {
             }
             args->config_path = strdup(argv[++i]);
         } else if (strcmp(argv[i], "--help") == 0) {
+            args->help = 1;
             print_usage();
-            free_args(args);
-            return NULL;
         } else {
             /* unknown/unsupported argument: ignore or handle as needed */
             printf("Warning: unknown argument '%s'. Use --help for usage information.\n", argv[i]);
@@ -88,6 +87,10 @@ Args *parse_args(int argc, char *argv[]) {
             free_args(args);
             return NULL;
         }
+    }
+
+    if (args->help) {
+        return args;
     }
 
     if (args->to == NULL) {
