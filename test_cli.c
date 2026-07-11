@@ -85,6 +85,15 @@ void test_cli_required_arguments(void) {
     TEST_ASSERT(args == NULL, "missing value for --to parameter returns NULL");
 }
 
+void test_cli_help_flag(void) {
+    int argc = 2;
+    char *argv[] = {"./email", "--help"};
+    Args *args = parse_args(argc, argv);
+    TEST_ASSERT(args != NULL, "valid --help flag returns valid Args-non-NULL");
+    TEST_ASSERT(args->help == 1, "--help flag sets correct value");
+    free_args(args);
+}
+
 int main() {
     TEST_RUN(test_cli_no_arguments);
     TEST_RUN(test_cli_valid_to_flag);
@@ -96,6 +105,7 @@ int main() {
     TEST_RUN(test_cli_invalid_argument);
     TEST_RUN(test_cli_missing_value);
     TEST_RUN(test_cli_required_arguments);
+    TEST_RUN(test_cli_help_flag);
     TEST_SUMMARY();
     return 0;
 }

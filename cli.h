@@ -9,6 +9,7 @@ typedef struct {
     char *backend;
     char *port;
     char *config_path;
+    int help;
 } Args;
 
 Args *parse_args(int argc, char *argv[]);
