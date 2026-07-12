@@ -6,7 +6,7 @@ LDFLAGS = -L/usr/local/opt/openssl/lib -lssl -lcrypto -L/usr/local/opt/curl/lib 
 
 # Files
 TARGET = email
-OBJS = main.o email.o transport.o sendmail.o smtp.o rest_api.o config.o
+OBJS = main.o email.o transport.o sendmail.o smtp.o rest_api.o config.o cli.o
 
 .PHONY: clean test
 
@@ -35,6 +35,9 @@ rest_api.o: rest_api.c rest_api.h
 
 config.o: config.c config.h
 	$(CC) $(CFLAGS) -c config.c
+
+cli.o: cli.c cli.h
+	$(CC) $(CFLAGS) -c cli.c
 
 # Test Binary
 test_email: test_email.o email.o
