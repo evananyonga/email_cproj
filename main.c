@@ -3,6 +3,7 @@
 #include "email.h"
 #include "transport.h"
 #include "config.h"
+#include "cli.h"
 
 int main() {
     Email email;
