@@ -5,10 +5,23 @@
 #include "config.h"
 #include "cli.h"
 
-int main() {
+int main(int argc, char *argv[]) {
+    Args *args;
     Email email;
     Config *config;
     char config_path[256];
+
+    /* parse CLI arguments */
+    args = parse_args(argc, argv);
+    if (args == NULL) return 1;
+
+    /* if help flag is set, exit after printing usage */
+    if (args->help) {
+        free_args(args);
+        return 0;
+    }
+
+    /* load config */
     snprintf(config_path, sizeof(config_path), "%s/C/email_app/config", getenv("HOME"));
 
     config = load_config(config_path);
@@ -17,8 +30,7 @@ int main() {
         return 1;
     }
 
-    // print_config(config);
-
+   /* merge - CLI overides config */
     email.from = config->smtp_from;
     email.to = config->smtp_to;
     email.subject = "Hello from your the other side";
