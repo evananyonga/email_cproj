@@ -57,6 +57,8 @@ int main(int argc, char *argv[]) {
     // printf("DEBUG email from: %s\n", email.from ? email.from : "NULL");
 
     transport->send(&email, config);
+
+    free_args(args);
     free_config(config);
 
     return 0;
