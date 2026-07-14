@@ -22,29 +22,34 @@ int main(int argc, char *argv[]) {
     }
 
     /* load config */
-    snprintf(config_path, sizeof(config_path), "%s/C/email_app/config", getenv("HOME"));
+    snprintf(config_path, sizeof(config_path), "%s/C/email_app/config", args->config_path ? args->config_path : getenv("HOME"));
 
     config = load_config(config_path);
     if (config == NULL) {
+        free_args(args);
         printf("Error loading config.  Aborting...\n");
         return 1;
     }
 
    /* merge - CLI overides config */
-    email.from = config->smtp_from;
-    email.to = config->smtp_to;
-    email.subject = "Hello from your the other side";
-    email.body = "Be Afraid, be very afraid.  I am coming for you.";
+    email.from = args->from ? args->from : config->smtp_from;
+    email.to = args->to ? args->to : config->smtp_to;
+    email.subject = args->subject ? args->subject : "(no subject)";
+    email.body = args->body ? args->body : NULL;
 
     if (!validate_email(&email)) {
         printf("Email is invalid.  Aborting...\n");
+        free_args(args);
         free_config(config);
         return 1;
     }
 
-    Transport *transport = get_transport(config->default_backend);
+    /* select a transport backend based on CLI argument or config default */
+    const char *backend = args->backend ? args->backend : config->default_backend;
+    Transport *transport = get_transport(backend);
     if (transport == NULL) {
-        printf("Error: No transport found for %s\n", config->default_backend);
+        printf("Error: No transport found for %s\n", backend);
+        free_args(args);
         free_config(config);
         return 1;
     }
