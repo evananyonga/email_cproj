@@ -47,7 +47,7 @@ test_email.o: test_email.c email.h
 	$(CC) $(CFLAGS) -c test_email.c
 
 test_transport: test_transport.o transport.o sendmail.o smtp.o rest_api.o email.o config.o cli.o
-	$(CC) $(CFLAGS) test_transport.o transport.o -o sendmail.o smtp.o rest_api.o email.o config.o cli.o -o test_transport
+	$(CC) $(CFLAGS) $(LDFLAGS) test_transport.o transport.o -o sendmail.o smtp.o rest_api.o email.o config.o cli.o -o test_transport
 
 test_transport.o: test_transport.c test_framework.h transport.h
 	$(CC) $(CFLAGS) -c test_transport.c
