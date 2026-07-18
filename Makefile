@@ -43,11 +43,17 @@ cli.o: cli.c cli.h
 test_email: test_email.o email.o
 	$(CC) $(CFLAGS) test_email.o email.o -o test_email
 
-test_config: test_config.o config.o
-	$(CC) $(CFLAGS) test_config.o config.o -o test_config
-
 test_email.o: test_email.c email.h
 	$(CC) $(CFLAGS) -c test_email.c
+
+test_transport: test_transport.o transport.o sendmail.o smtp.o rest_api.o email.o config.o cli.o
+	$(CC) $(CFLAGS) test_transport.o transport.o -o sendmail.o smtp.o rest_api.o email.o config.o cli.o -o test_transport
+
+test_transport.o: test_transport.c test_framework.h transport.h
+	$(CC) $(CFLAGS) -c test_transport.c
+
+test_config: test_config.o config.o
+	$(CC) $(CFLAGS) test_config.o config.o -o test_config
 
 test_config.o: test_config.c config.h
 	$(CC) $(CFLAGS) -c test_config.c
@@ -57,9 +63,10 @@ test_cli: test_cli.o cli.o
 
 test: test_email test_config test_cli
 	./test_email
+	./test_transport
 	./test_config
 	./test_cli
 
 # Clean rule to remove all built files
 clean:
-	rm -f $(TARGET) $(OBJS) test_email.o test_email test_config.o test_config test_cli.o test_cli
+	rm -f $(TARGET) $(OBJS) test_email.o test_email test_transport.o test_transport.o test_config.o test_config test_cli.o test_cli test_transport1
