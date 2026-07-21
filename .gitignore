@@ -3,6 +3,7 @@ config
 test_email
 test_config
 test_cli
+test_transport
 
 *.o
 *.env
