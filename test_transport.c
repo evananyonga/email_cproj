@@ -20,7 +20,13 @@ void test_transport_is_set(void) {
     TEST_ASSERT(transport != NULL, "SMTP transport should be available");
 }
 
+test_transport_invalid_backend(void) {
+    Transport *transport = get_transport("invalid_backend");
+    TEST_ASSERT(transport == NULL, "Invalid transport backend should return NULL");
+}
+
 int main() {
     TEST_RUN(test_transport_is_set);
-    return tests_failed > 0 ? 1 : 0;    
+    TEST_RUN(test_transport_invalid_backend);
+    return tests_failed > 0 ? 1 : 0;
 }
