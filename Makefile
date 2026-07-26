@@ -61,7 +61,7 @@ test_config.o: test_config.c config.h
 test_cli: test_cli.o cli.o
 	$(CC) $(CFLAGS) test_cli.o cli.o -o test_cli
 
-test: test_email test_config test_cli
+test: test_email test_config test_cli test_transport
 	./test_email
 	./test_transport
 	./test_config
