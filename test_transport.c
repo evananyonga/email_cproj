@@ -25,8 +25,14 @@ void test_transport_invalid_backend(void) {
     TEST_ASSERT(transport == NULL, "Invalid transport backend should return NULL");
 }
 
+void test_sendmail_route(void) {
+    Transport *transport = get_transport("sendmail");
+    TEST_ASSERT(strcmp(transport->name, "sendmail") == 0, "Sendmail transport should be available");
+}
+
 int main() {
     TEST_RUN(test_transport_is_set);
     TEST_RUN(test_transport_invalid_backend);
+    TEST_RUN(test_sendmail_route);
     return tests_failed > 0 ? 1 : 0;
 }
