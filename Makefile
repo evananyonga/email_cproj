@@ -69,4 +69,4 @@ test: test_email test_config test_cli test_transport
 
 # Clean rule to remove all built files
 clean:
-	rm -f $(TARGET) $(OBJS) test_email.o test_email test_transport.o test_transport test_config.o test_config test_cli.o test_cli
+	rm -f $(OBJS) $(TARGET) test_email.o test_email test_config.o test_config test_cli.o test_cli test_transport.o test_transport

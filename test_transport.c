@@ -30,9 +30,17 @@ void test_sendmail_route(void) {
     TEST_ASSERT(strcmp(transport->name, "sendmail") == 0, "Sendmail transport should be available");
 }
 
+void test_smtp_route(void) {
+    Transport *transport = get_transport("smtp");
+    TEST_ASSERT(strcmp(transport->name, "smtp") == 0, "SMTP transport should be available");
+}
+
 int main() {
     TEST_RUN(test_transport_is_set);
     TEST_RUN(test_transport_invalid_backend);
     TEST_RUN(test_sendmail_route);
+    TEST_RUN(test_smtp_route);
+    
+    TEST_SUMMARY();
     return tests_failed > 0 ? 1 : 0;
 }
