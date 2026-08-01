@@ -35,11 +35,17 @@ void test_smtp_route(void) {
     TEST_ASSERT(strcmp(transport->name, "smtp") == 0, "SMTP transport should be available");
 }
 
+void test_rest_api_route(void) {
+    Transport *transport = get_transport("rest_api");
+    TEST_ASSERT(strcmp(transport->name, "rest_api") == 0, "REST API transport should be available");
+}
+
 int main() {
     TEST_RUN(test_transport_is_set);
     TEST_RUN(test_transport_invalid_backend);
     TEST_RUN(test_sendmail_route);
     TEST_RUN(test_smtp_route);
+    TEST_RUN(test_rest_api_route);
     
     TEST_SUMMARY();
     return tests_failed > 0 ? 1 : 0;
